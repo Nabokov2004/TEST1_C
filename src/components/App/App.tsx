@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
+
 import InputForm from "./InputForm/InputForm";
 import UserList from "./UserList/UserList";
 import Pagination from "./Pagination/Pagination";
-import { User, Query, requestUsers } from "../../api/api";
+import {  requestUsers } from "../../api/api";
+import { User,Query } from "../../types/common";
+
 import "./App.css";
+
 const App: React.FC = () => {
   const [query, setQuery] = useState<Query>({
     name: "",
@@ -31,19 +35,22 @@ const App: React.FC = () => {
       });
   }, [query]);
 
-  return (
-    <div className="wrapper">
-      <InputForm query={query} setQuery={setQuery} />
-      {loading ? (
+  const render =  loading ? (
         <p>Loading...</p>
       ) : error ? (
         <p>{error}</p>
       ) : (
         <>
           <UserList users={users} />
-          <Pagination totalUsers={10} query={query} setQuery={setQuery} />
+          
         </>
-      )}
+      )
+
+  return (
+    <div className="wrapper">
+      <InputForm query={query} setQuery={setQuery} />
+      {render}
+      <Pagination totalUsers={10} query={query} setQuery={setQuery} />
     </div>
   );
 };
